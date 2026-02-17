@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      width: 100%;
+      height: auto;
+      font-family: sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: rgb(231, 234, 236);
+
+    }
+
+    header {
+      display: flex;
+      justify-content: space-evenly;
+      gap: 20px;
+    }
+
+    #search {
+      width: 30%;
+      height: 36px;
+      text-align: center;
+      border-radius: 10px;
+      border: none;
+      margin-top: 20px;
+    }
+
+    #search::placeholder {
+      font-size: 15px;
+    }
+
+    #priority {
+      width: 20%;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #con {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+
+    }
+
+    #con div {
+      height: auto;
+      /* border: 1px solid #b99d9d; */
+      padding: 15px;
+      text-align: center;
+      border-radius: 10px;
+      background-color: rgb(248, 249, 250);
+    }
+
+    .color {
+      border: none;
+      width: 50px;
+      background-color: rgb(10, 8, 6);
+      height: 30px;
+      color: rgb(241, 240, 237);
+      border-radius: 8px;
+    }
+
+    .buttons {
+      margin-left: 30px;
+      border: none;
+      width: 80px;
+      background-color: rgb(10, 8, 6);
+      height: 30px;
+      color: rgb(241, 240, 237);
+      border-radius: 8px;
+    }
+
+    .btn {
+      border: none;
+      width: 100px;
+      background-color: rgb(10, 8, 6);
+      height: 25px;
+      color: rgb(241, 240, 237);
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
+      padding-top: 10px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+
+    <h2>task management system</h2>
+    <input type="search" name="" id="search" placeholder="Search  By Name">
+    <select id="priority">
+      <option value="">Sort by Priority</option>
+      <option value="high">High priority</option>
+      <option value="medium">Medium priority</option>
+      <option value="low">Low priority</option>
+    </select>
+    <a class="btn" href="task.html">ADD NEW</a>
+  </header>
+  <div>
+
+    <div id="con">
+
+    </div>
+  </div>
+  <script>
+    let cart = JSON.parse(localStorage.getItem("data")) || []
+    let container = document.querySelector("#con")
+    function displayData(data) {
+      container.innerHTML = ""
+
+      data.forEach((el, i) => {
+        let div = document.createElement("div")
+
+        let task = document.createElement("h3")
+        task.innerHTML = "Task name :" + el.task
+        let date = document.createElement("h4")
+        date.innerHTML = "Due date : " + el.date
+        let dis = document.createElement("h5")
+        dis.innerHTML = "Discription :" + el.dis
+        dis.style.textAlign = "start"
+        dis.style.padding = "10px"
+        let priority = document.createElement("h4")
+        priority.innerHTML = "Priority :" + el.priority
+        priority.style.marginTop = "10px"
+        let edit = document.createElement("button")
+        edit.innerHTML = "Edit"
+        edit.style.marginRight = "60px"
+
+        edit.classList.add("color")
+        edit.addEventListener("click", () => {
+          editdata(i)
+        })
+        let remove = document.createElement("button")
+        remove.innerText = "Delete"
+        remove.classList.add("buttons");
+        remove.addEventListener("click", () => {
+          removedata(i)
+        })
+        div.append(task, date, dis, priority, edit, remove)
+        container.append(div)
+      });
+    }
+    displayData(cart);
+
+
+    function editdata(i) {
+      let newtask = prompt("enter the netw task : ", cart[i].task)
+      let newdate = prompt("enter new date: ", cart[i].date)
+      let newdis = prompt("enter new discription :", cart[i].dis)
+      let newpriority = prompt("enter new priority")
+
+
+      if (newtask !== null) {
+        cart[i].task = newtask;
+        cart[i].date = newdate;
+        cart[i].dis = newdis;
+        cart[i].priority = newpriority;
+
+        localStorage.setItem("data", JSON.stringify(cart));
+
+        location.reload();
+      }
+    }
+    function removedata(i) {
+      cart.splice(i, 1)
+      localStorage.setItem("data", JSON.stringify(cart))
+      location.reload()
+    }
+    document.querySelector("#priority").addEventListener("change", (e) => {
+
+      let value = e.target.value;
+      let sorted = [...cart];
+
+      const order = {
+        high: 3,
+        medium: 2,
+        low: 1
+      };
+
+      if (value === "low") {
+        sorted.sort((a, b) => order[a.priority] - order[b.priority]);
+      }
+      else if (value === "high") {
+        sorted.sort((a, b) => order[b.priority] - order[a.priority]);
+      }
+      else if (value === "medium") {
+        sorted = sorted.filter(item => item.priority === "medium");
+      }
+
+      displayData(sorted);
+    });
+
+    document.querySelector("#search").addEventListener("input", function () {
+      let value = this.value.toLowerCase()
+
+      let filterd = cart.filter((el) => {
+        return el.task.toLowerCase().includes(value)
+      })
+
+      displayData(filterd)
+    })
+
+  </script>
+</body>
+
+</html>

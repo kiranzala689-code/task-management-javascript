@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      width: 100%;
+      height: auto;
+      text-align: center;
+      margin: 30px;
+      font-family: sans-serif, Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: rgb(231, 234, 236);
+    }
+
+    form {
+      /* border: 1px solid; */
+      width: 40%;
+      height: 400px;
+      margin: auto;
+
+      padding: 20px 10px;
+      border-radius: 20px;
+      background-color: rgb(195, 197, 199);
+    }
+
+    input {
+      width: 60%;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 20px;
+
+    }
+
+    #priority {
+      width: 60%;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #dis {
+      width: 60%;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    body h1 {
+      color: rgb(5, 89, 163);
+      margin-top: 40px;
+    }
+
+    #dis {
+      /* width: 20px; */
+      height: 60px;
+      margin-left: 80PX;
+    }
+
+    #priority {
+      margin-left: 80PX;
+    }
+
+    label {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    #sub {
+      margin-left: 80PX;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>TASK MANAGEMENT SYSTEM</h1>
+  <form action="">
+    <h3>Enter Task Details</h3>
+    <Label>TASK NAME</Label>
+    <input type="text" name="task" id="task" placeholder="enter task"><BR>
+    <label for="">DUE DATE </label>
+    <input type="date" name="date" id="date" placeholder="due date"><br>
+
+    <textarea name="discription" id="dis" placeholder="ADD DISCRIPTION"></textarea>
+    <select name="" id="priority">
+      <option value="">sort by priority</option>
+      <option value="high">high priority</option>
+      <option value="medium">medium priority</option>
+      <option value="low">low priority</option>
+
+    </select>
+    <input type="submit" id="sub">
+  </form>
+  <script>
+    let arr = JSON.parse(localStorage.getItem("data")) || []
+    document.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      let task = document.querySelector("#task").value
+      let date = document.querySelector("#date").value
+      let dis = document.querySelector("#dis").value
+      let priority = document.querySelector("#priority").value
+
+      let obj = {
+        task, date, dis, priority
+      }
+      arr.push(obj)
+      localStorage.setItem("data", JSON.stringify(arr))
+      window.location.href = "task2.html"
+    })
+
+
+
+
+  </script>
+</body>
+
+</html>
